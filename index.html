@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аудио Плеер</title>
+</head>
+<body>
+    <h1>Слушай аудио онлайн</h1>
+    <ul id="playlist"></ul>
+
+    <audio id="audioPlayer" controls></audio>
+
+    <script>
+        fetch('/audio-list')
+            .then(response => response.json())
+            .then(files => {
+                const playlist = document.getElementById('playlist');
+                const audioPlayer = document.getElementById('audioPlayer');
+
+                files.forEach(file => {
+                    let listItem = document.createElement('li');
+                    listItem.textContent = file;
+                    listItem.style.cursor = "pointer";
+                    listItem.onclick = () => {
+                        audioPlayer.src = '/audio/' + file;
+                        audioPlayer.play();
+                    };
+                    playlist.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error('Ошибка загрузки списка аудио:', error));
+    </script>
+</body>
+</html>
